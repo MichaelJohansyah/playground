@@ -68,7 +68,12 @@ class MatchingPairGame {
         // Calculate total cards and pairs based on grid size
         let totalCards, rows, cols;
 
-        if (this.gridSize === 2) {
+        if (this.gridSize === 1) {
+            // 2x2 grid (4 cards)
+            rows = 2;
+            cols = 2;
+            totalCards = 4;
+        } else if (this.gridSize === 2) {
             // 2x4 grid (8 cards)
             rows = 2;
             cols = 4;
@@ -140,7 +145,9 @@ class MatchingPairGame {
         board.innerHTML = "";
 
         // Set grid class based on grid size
-        if (this.gridSize === 2) {
+        if (this.gridSize === 1) {
+            board.className = "game-board grid-2x2";
+        } else if (this.gridSize === 2) {
             board.className = "game-board grid-2x4";
         } else {
             board.className = `game-board grid-${this.gridSize}x${this.gridSize}`;

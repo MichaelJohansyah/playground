@@ -178,6 +178,11 @@ h1 {
 }
 
 /* Responsive grid sizes */
+.grid-2x2 {
+    grid-template-columns: repeat(2, 80px);
+    grid-template-rows: repeat(2, 80px);
+}
+
 .grid-2x4 {
     grid-template-columns: repeat(4, 70px);
     grid-template-rows: repeat(2, 70px);
@@ -204,6 +209,11 @@ h1 {
 }
 
 @media (max-width: 600px) {
+    .grid-2x2 {
+        grid-template-columns: repeat(2, 70px);
+        grid-template-rows: repeat(2, 70px);
+    }
+
     .grid-2x4 {
         grid-template-columns: repeat(4, 60px);
         grid-template-rows: repeat(2, 60px);

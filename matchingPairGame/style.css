@@ -1,0 +1,235 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Arial", sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.game-container {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    max-width: 600px;
+    width: 100%;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+    font-size: 2.5em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.size-selector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.size-selector label {
+    font-weight: bold;
+    color: #555;
+}
+
+.size-selector select {
+    padding: 8px 12px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    background: white;
+    cursor: pointer;
+}
+
+.new-game-btn {
+    background: #4caf50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+.new-game-btn:hover {
+    background: #45a049;
+}
+
+.game-stats {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    font-weight: bold;
+    color: #555;
+}
+
+.game-board {
+    display: grid;
+    gap: 10px;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.card {
+    aspect-ratio: 1;
+    background: #f0f0f0;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2em;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.card.flipped {
+    background: #fff;
+    border-color: #4caf50;
+}
+
+.card.matched {
+    background: #e8f5e8;
+    border-color: #4caf50;
+    cursor: default;
+}
+
+.card.matched:hover {
+    transform: none;
+}
+
+.card-back {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    color: white;
+    font-weight: bold;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+}
+
+.card-front {
+    display: none;
+    font-size: 2.5em;
+    animation: flipIn 0.3s ease;
+}
+
+.card.flipped .card-back {
+    display: none;
+}
+
+.card.flipped .card-front {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+@keyframes flipIn {
+    from {
+        transform: rotateY(-90deg);
+    }
+    to {
+        transform: rotateY(0deg);
+    }
+}
+
+.win-message {
+    text-align: center;
+    margin-top: 20px;
+    padding: 20px;
+    background: #4caf50;
+    color: white;
+    border-radius: 10px;
+    font-size: 1.5em;
+    font-weight: bold;
+    display: none;
+}
+
+/* Responsive grid sizes */
+.grid-2x4 {
+    grid-template-columns: repeat(4, 70px);
+    grid-template-rows: repeat(2, 70px);
+}
+
+.grid-3x3 {
+    grid-template-columns: repeat(3, 80px);
+    grid-template-rows: repeat(3, 80px);
+}
+
+.grid-4x4 {
+    grid-template-columns: repeat(4, 70px);
+    grid-template-rows: repeat(4, 70px);
+}
+
+.grid-5x5 {
+    grid-template-columns: repeat(5, 60px);
+    grid-template-rows: repeat(5, 60px);
+}
+
+.grid-6x6 {
+    grid-template-columns: repeat(6, 50px);
+    grid-template-rows: repeat(6, 50px);
+}
+
+@media (max-width: 600px) {
+    .grid-2x4 {
+        grid-template-columns: repeat(4, 60px);
+        grid-template-rows: repeat(2, 60px);
+    }
+
+    .grid-3x3 {
+        grid-template-columns: repeat(3, 70px);
+        grid-template-rows: repeat(3, 70px);
+    }
+
+    .grid-4x4 {
+        grid-template-columns: repeat(4, 60px);
+        grid-template-rows: repeat(4, 60px);
+    }
+
+    .grid-5x5 {
+        grid-template-columns: repeat(5, 50px);
+        grid-template-rows: repeat(5, 50px);
+    }
+
+    .grid-6x6 {
+        grid-template-columns: repeat(6, 40px);
+        grid-template-rows: repeat(6, 40px);
+    }
+
+    .card {
+        font-size: 1.5em;
+    }
+}

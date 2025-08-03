@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Guessing</title>
+</head>
+<body>
+    <h1>Number Guessing Game</h1>
+    <p id="correctNumber"></p>
+    <p>1 - 100, what's the number?</p>
+
+    <input type="number" min="1" max="100" id="input-box" >
+    <button onclick="checkNumber()">check</button>
+
+    <p id="checkInput"></p>
+    <p id="guessCount">Guess Count : 0 </p>
+
+    <button id="resetButton" style="display: none;" onclick="resetGame()">Reset</button>
+
+
+    <script src="script.js""></script>
+</body>
+</html>

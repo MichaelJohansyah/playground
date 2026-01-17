@@ -371,8 +371,14 @@ function shuffleArray(array) {
 
 // Update progress display
 function updateProgress() {
-    document.getElementById("current-q").textContent = currentQuestion + 1;
-    document.getElementById("total-q").textContent = totalQuestions;
+    if (isEndlessMode) {
+        // For endless mode, show just the current question number
+        document.getElementById("current-q").textContent = currentQuestion + 1;
+        document.getElementById("total-q").textContent = "∞";
+    } else {
+        document.getElementById("current-q").textContent = currentQuestion + 1;
+        document.getElementById("total-q").textContent = totalQuestions;
+    }
     document.getElementById("correct").textContent = correctCount;
     document.getElementById("wrong").textContent = wrongCount;
 
@@ -507,7 +513,8 @@ function checkAnswer(selected, correct) {
     nextBtn.classList.remove("hidden");
 
     // Auto-advance or show next button
-    if (currentQuestion + 1 >= questionQueue.length && !isEndlessMode) {
+    // In endless mode, always show "Next" unless lives are depleted
+    if (!isEndlessMode && currentQuestion + 1 >= questionQueue.length) {
         nextBtn.textContent = "See Results";
         nextBtn.onclick = showResults;
     } else {
@@ -519,8 +526,31 @@ function checkAnswer(selected, correct) {
 // Go to next question
 function nextQuestion() {
     currentQuestion++;
+
+    // For endless mode, generate more questions if running low
+    if (isEndlessMode && currentQuestion >= questionQueue.length - 2) {
+        addMoreQuestionsToQueue();
+    }
+
     updateProgress();
     loadQuestion();
+}
+
+// Add more questions to the queue for endless mode
+function addMoreQuestionsToQueue() {
+    const shuffledCountries = [...filteredCountries].sort(
+        () => Math.random() - 0.5
+    );
+
+    for (let i = 0; i < filteredCountries.length; i++) {
+        const correctCountry = shuffledCountries[i];
+        const distractors = getRandomDistractors(correctCountry.name);
+
+        questionQueue.push({
+            correct: correctCountry,
+            options: shuffleArray([correctCountry, ...distractors]),
+        });
+    }
 }
 
 // Show results
@@ -528,12 +558,14 @@ function showResults() {
     gameScreen.classList.add("hidden");
     resultsScreen.classList.remove("hidden");
 
-    const percentage =
-        Math.round((correctCount / (correctCount + wrongCount)) * 100) || 0;
+    const totalAnswered = correctCount + wrongCount;
+    const percentage = Math.round((correctCount / totalAnswered) * 100) || 0;
 
     // Update results display
     document.getElementById("final-correct").textContent = correctCount;
-    document.getElementById("final-total").textContent = totalQuestions;
+    document.getElementById("final-total").textContent = isEndlessMode
+        ? totalAnswered
+        : totalQuestions;
     document.getElementById("score-percentage").textContent = `${percentage}%`;
     document.getElementById("result-continent").textContent = currentContinent;
 
@@ -607,13 +639,14 @@ function saveGameStats(percentage) {
 // Add score to leaderboard
 function addToLeaderboard(percentage) {
     const leaderboard = loadLeaderboard();
+    const totalAnswered = correctCount + wrongCount;
 
     const entry = {
         region: currentContinent,
         mode:
             currentGameMode === "flag-to-name" ? "Flag → Name" : "Name → Flag",
         score: correctCount,
-        total: totalQuestions,
+        total: isEndlessMode ? totalAnswered : totalQuestions,
         percentage: percentage,
         date: new Date().toLocaleDateString(),
     };
@@ -736,12 +769,18 @@ function confirmResetStats() {
 
 // ==================== LEADERBOARD ====================
 
-let currentLeaderboardTab = "all";
+let currentLeaderboardTab = "regular";
 
 // Show leaderboard screen
 function showLeaderboard() {
     modeSelection.classList.add("hidden");
     leaderboardScreen.classList.remove("hidden");
+
+    // Reset active tab button
+    document.querySelectorAll(".tab-btn").forEach((btn, index) => {
+        btn.classList.toggle("active", index === 0);
+    });
+    currentLeaderboardTab = "regular";
 
     renderLeaderboard();
 }
@@ -752,9 +791,11 @@ function switchLeaderboardTab(tab) {
 
     // Update tab buttons
     document.querySelectorAll(".tab-btn").forEach((btn) => {
-        btn.classList.remove("active");
+        const isActive =
+            (tab === "regular" && btn.textContent.includes("Regular")) ||
+            (tab === "endless" && btn.textContent.includes("Endless"));
+        btn.classList.toggle("active", isActive);
     });
-    event.target.classList.add("active");
 
     renderLeaderboard();
 }

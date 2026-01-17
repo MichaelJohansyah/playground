@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
@@ -7,18 +7,145 @@
         <link rel="stylesheet" href="styles.css" />
     </head>
     <body>
-        <h1>Flag Quiz Game</h1>
+        <div class="container">
+            <h1>🏳️ Flag Quiz Game 🏳️</h1>
 
+            <!-- Mode Selection Screen -->
+            <div id="mode-selection" class="screen">
+                <h2>Choose Game Mode</h2>
+                <div class="mode-buttons">
+                    <button
+                        class="mode-btn"
+                        onclick="startGame('flag-to-name')"
+                    >
+                        <div class="mode-icon">🏴</div>
+                        <div class="mode-title">Flag → Name</div>
+                        <div class="mode-desc">
+                            See a flag, guess the country name
+                        </div>
+                    </button>
+                    <button
+                        class="mode-btn"
+                        onclick="startGame('name-to-flag')"
+                    >
+                        <div class="mode-icon">🌍</div>
+                        <div class="mode-title">Name → Flag</div>
+                        <div class="mode-desc">
+                            See a country name, pick the correct flag
+                        </div>
+                    </button>
+                </div>
+                <div class="difficulty-section">
+                    <h3>Difficulty</h3>
+                    <div class="difficulty-buttons">
+                        <button
+                            class="diff-btn active"
+                            onclick="setDifficulty('random')"
+                        >
+                            Random
+                        </button>
+                        <button
+                            class="diff-btn"
+                            onclick="setDifficulty('similar')"
+                        >
+                            Similar Flags (Hard)
+                        </button>
+                    </div>
+                </div>
+            </div>
 
-        <div class="flag-image-container">
-            <img src="flagImages/Flag_of_Indonesia.svg" alt="Country Flag" class="flag-image"/>
+            <!-- Game Screen -->
+            <div id="game-screen" class="screen hidden">
+                <!-- Progress Bar -->
+                <div class="progress-container">
+                    <div class="progress-stats">
+                        <span class="correct-count"
+                            >✅ Correct: <span id="correct">0</span></span
+                        >
+                        <span class="wrong-count"
+                            >❌ Wrong: <span id="wrong">0</span></span
+                        >
+                        <span class="question-count"
+                            >📝 Question: <span id="current-q">1</span>/<span
+                                id="total-q"
+                                >10</span
+                            ></span
+                        >
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                </div>
+
+                <!-- Question Area -->
+                <div id="question-area">
+                    <!-- Mode 1: Flag to Name -->
+                    <div id="flag-to-name-mode" class="question-mode hidden">
+                        <div class="flag-image-container">
+                            <img
+                                id="question-flag"
+                                src=""
+                                alt="Country Flag"
+                                class="flag-image"
+                            />
+                        </div>
+                        <p class="question-text">
+                            What country does this flag belong to?
+                        </p>
+                        <div
+                            id="name-options"
+                            class="options-grid text-options"
+                        >
+                            <!-- Options will be inserted here -->
+                        </div>
+                    </div>
+
+                    <!-- Mode 2: Name to Flag -->
+                    <div id="name-to-flag-mode" class="question-mode hidden">
+                        <p class="question-text">
+                            Which flag belongs to
+                            <span id="country-name-question"></span>?
+                        </p>
+                        <div
+                            id="flag-options"
+                            class="options-grid flag-options"
+                        >
+                            <!-- Flag options will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Next Button -->
+                <button
+                    id="next-btn"
+                    class="next-btn hidden"
+                    onclick="nextQuestion()"
+                >
+                    Next Question →
+                </button>
+                <button id="back-btn" class="back-btn" onclick="goToMenu()">
+                    ← Back to Menu
+                </button>
+            </div>
+
+            <!-- Results Screen -->
+            <div id="results-screen" class="screen hidden">
+                <h2>🎉 Quiz Complete! 🎉</h2>
+                <div class="results-card">
+                    <div class="final-score">
+                        <span id="final-correct">0</span> /
+                        <span id="final-total">10</span>
+                    </div>
+                    <div class="score-percentage" id="score-percentage">0%</div>
+                    <div class="score-message" id="score-message"></div>
+                </div>
+                <div class="results-buttons">
+                    <button class="play-again-btn" onclick="goToMenu()">
+                        Play Again
+                    </button>
+                </div>
+            </div>
         </div>
-
-        <p>Whats the country name?</p>
-        <button>Indonesia</button>
-        <button>United States</button>
-        <button>India</button>
-        <button>France</button>
 
         <script src="script.js"></script>
     </body>

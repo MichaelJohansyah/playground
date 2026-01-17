@@ -1073,3 +1073,32 @@ body.dark-mode .dark-mode-toggle {
 body.dark-mode .dark-mode-toggle:hover {
     background: rgba(0, 0, 0, 0.5);
 }
+
+body.dark-mode .question-text {
+    color: #e0e0e0;
+}
+
+body.dark-mode #country-name-question {
+    color: #9580ff;
+}
+
+body.dark-mode .score-percentage,
+body.dark-mode .score-message {
+    color: #e0e0e0;
+}
+
+body.dark-mode .qc-label {
+    color: #e0e0e0;
+}
+
+body.dark-mode .qc-desc {
+    color: #a0a0a0;
+}
+
+body.dark-mode #results-screen h2 {
+    color: #e0e0e0;
+}
+
+body.dark-mode .progress-bar {
+    background: #3a3a5e;
+}

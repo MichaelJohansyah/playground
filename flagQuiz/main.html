@@ -8,7 +8,17 @@
     </head>
     <body>
         <div class="container">
-            <h1>🏳️ Flag Quiz Game 🏳️</h1>
+            <!-- Header with Dark Mode Toggle -->
+            <div class="header">
+                <h1>🏳️ Flag Quiz Game 🏳️</h1>
+                <button
+                    id="dark-mode-toggle"
+                    class="dark-mode-toggle"
+                    onclick="toggleDarkMode()"
+                >
+                    🌙
+                </button>
+            </div>
 
             <!-- Mode Selection Screen -->
             <div id="mode-selection" class="screen">
@@ -16,7 +26,7 @@
                 <div class="mode-buttons">
                     <button
                         class="mode-btn"
-                        onclick="startGame('flag-to-name')"
+                        onclick="goToContinentSelection('flag-to-name')"
                     >
                         <div class="mode-icon">🏴</div>
                         <div class="mode-title">Flag → Name</div>
@@ -26,7 +36,7 @@
                     </button>
                     <button
                         class="mode-btn"
-                        onclick="startGame('name-to-flag')"
+                        onclick="goToContinentSelection('name-to-flag')"
                     >
                         <div class="mode-icon">🌍</div>
                         <div class="mode-title">Name → Flag</div>
@@ -35,23 +45,55 @@
                         </div>
                     </button>
                 </div>
-                <div class="difficulty-section">
-                    <h3>Difficulty</h3>
-                    <div class="difficulty-buttons">
-                        <button
-                            class="diff-btn active"
-                            onclick="setDifficulty('random')"
-                        >
-                            Random
-                        </button>
-                        <button
-                            class="diff-btn"
-                            onclick="setDifficulty('similar')"
-                        >
-                            Similar Flags (Hard)
-                        </button>
-                    </div>
+                <div class="menu-extras">
+                    <button class="menu-btn" onclick="showStats()">
+                        📊 Statistics
+                    </button>
+                    <button class="menu-btn" onclick="showLeaderboard()">
+                        🏆 Leaderboard
+                    </button>
                 </div>
+            </div>
+
+            <!-- Continent Selection Screen -->
+            <div id="continent-selection" class="screen hidden">
+                <h2>Choose Region</h2>
+                <p class="subtitle">
+                    Select which flags you want to be quizzed on
+                </p>
+                <div id="continent-buttons" class="continent-grid">
+                    <!-- Continent buttons will be inserted by JavaScript -->
+                </div>
+                <button class="back-btn" onclick="goToMenu()">
+                    ← Back to Game Mode
+                </button>
+            </div>
+
+            <!-- Question Settings Screen -->
+            <div id="question-settings" class="screen hidden">
+                <h2>How Many Questions?</h2>
+                <p class="subtitle">
+                    <span id="selected-region-display">World</span> •
+                    <span id="available-flags-count">254</span> flags available
+                </p>
+                <div id="question-count-buttons" class="question-count-grid">
+                    <!-- Question count buttons will be inserted by JavaScript -->
+                </div>
+                <div
+                    id="custom-input-container"
+                    class="custom-input-container hidden"
+                >
+                    <input
+                        type="number"
+                        id="custom-count-input"
+                        min="1"
+                        placeholder="Enter number"
+                    />
+                    <button onclick="confirmCustomCount()">Start</button>
+                </div>
+                <button class="back-btn" onclick="goToContinents()">
+                    ← Back to Region
+                </button>
             </div>
 
             <!-- Game Screen -->
@@ -71,6 +113,17 @@
                                 >10</span
                             ></span
                         >
+                    </div>
+                    <div class="game-badges">
+                        <div class="continent-badge">
+                            <span id="current-continent">🌍 World</span>
+                        </div>
+                        <div
+                            id="lives-container"
+                            class="lives-container hidden"
+                        >
+                            <span id="lives-display">❤️❤️❤️</span>
+                        </div>
                     </div>
                     <div class="progress-bar">
                         <div class="progress-fill" id="progress-fill"></div>
@@ -132,6 +185,12 @@
             <div id="results-screen" class="screen hidden">
                 <h2>🎉 Quiz Complete! 🎉</h2>
                 <div class="results-card">
+                    <div class="result-region">
+                        Region: <span id="result-continent">World</span>
+                    </div>
+                    <div class="result-mode-display">
+                        Mode: <span id="result-mode">10 Questions</span>
+                    </div>
                     <div class="final-score">
                         <span id="final-correct">0</span> /
                         <span id="final-total">10</span>
@@ -144,6 +203,68 @@
                         Play Again
                     </button>
                 </div>
+            </div>
+
+            <!-- Statistics Screen -->
+            <div id="stats-screen" class="screen hidden">
+                <h2>📊 Your Statistics</h2>
+                <div class="stats-container">
+                    <div class="stats-overview">
+                        <div class="stat-card">
+                            <div class="stat-value" id="stat-games">0</div>
+                            <div class="stat-label">Games Played</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="stat-correct">0</div>
+                            <div class="stat-label">Correct Answers</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="stat-accuracy">0%</div>
+                            <div class="stat-label">Accuracy</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="stat-streak">0</div>
+                            <div class="stat-label">Best Streak</div>
+                        </div>
+                    </div>
+                    <h3 class="stats-section-title">Accuracy by Region</h3>
+                    <div class="region-stats" id="region-stats">
+                        <!-- Region stats will be inserted by JavaScript -->
+                    </div>
+                </div>
+                <div class="stats-buttons">
+                    <button class="back-btn" onclick="goToMenu()">
+                        ← Back to Menu
+                    </button>
+                    <button class="reset-btn" onclick="confirmResetStats()">
+                        🗑️ Reset Stats
+                    </button>
+                </div>
+            </div>
+
+            <!-- Leaderboard Screen -->
+            <div id="leaderboard-screen" class="screen hidden">
+                <h2>🏆 Leaderboard</h2>
+                <div class="leaderboard-tabs">
+                    <button
+                        class="tab-btn active"
+                        onclick="switchLeaderboardTab('all')"
+                    >
+                        All Regions
+                    </button>
+                    <button
+                        class="tab-btn"
+                        onclick="switchLeaderboardTab('endless')"
+                    >
+                        Endless Mode
+                    </button>
+                </div>
+                <div class="leaderboard-container" id="leaderboard-container">
+                    <!-- Leaderboard entries will be inserted by JavaScript -->
+                </div>
+                <button class="back-btn" onclick="goToMenu()">
+                    ← Back to Menu
+                </button>
             </div>
         </div>
 
